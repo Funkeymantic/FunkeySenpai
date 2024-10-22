@@ -19,57 +19,57 @@
 
 ### 1. Clone the Repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/your-username/FunkeySenpai.git
 cd FunkeySenpai
-\`\`\`
+```
 
 ### 2. Set up Virtual Environment
 
 Create and activate a virtual environment:
 
-\`\`\`bash
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-\`\`\`
+```
 
 ### 3. Install Required Dependencies
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 The required libraries include:
-- \`discord.py\`
-- \`requests\`
-- \`python-dotenv\`
-- \`python-chess\`
-- \`aiohttp\` (for API handling)
+- `discord.py`
+- `requests`
+- `python-dotenv`
+- `python-chess`
+- `aiohttp` (for API handling)
 
 ### 4. Environment Setup
 
-Create a \`.env\` file in the root directory and add your bot tokens and client IDs:
+Create a `.env` file in the root directory and add your bot tokens and client IDs:
 
-\`\`\`env
+```env
 DISCORD_TOKEN=your_discord_bot_token
 TWITCH_TOKEN=your_twitch_token
 TWITCH_CLIENT_ID=your_twitch_client_id
-\`\`\`
+```
 
 ### 5. Run the Bot
 
-\`\`\`bash
+```bash
 python bot.py
-\`\`\`
+```
 
 ## How to Use the FunkeySenpai Bot
 
 ### Contests
 - **Create a Contest (Mod-Only):**
 
-   \`\`\`bash
+   ```bash
    !create_contest
-   \`\`\`
+   ```
 
    The bot will ask for the following details:
    - Game (e.g., Valorant)
@@ -82,23 +82,23 @@ python bot.py
 
 - **Join a Contest:**
 
-   Users can join a contest using the \`~contest\` command followed by their player ID:
+   Users can join a contest using the `~contest` command followed by their player ID:
 
-   \`\`\`bash
+   ```bash
    ~contest player_id
-   \`\`\`
+   ```
 
 - **List Contests:**
 
-   \`\`\`bash
+   ```bash
    !list_contests
-   \`\`\`
+   ```
 
 - **List Participants (Mod-Only):**
 
-   \`\`\`bash
+   ```bash
    !list_participants contest_id
-   \`\`\`
+   ```
 
 ### Twitch Notifications
 - Automatically send live notifications to Discord when users with the "streamer" role go live.
@@ -111,9 +111,9 @@ python bot.py
 
    Use the command to set up a message for users to react to for role assignment:
 
-   \`\`\`bash
+   ```bash
    !setup_reaction_roles
-   \`\`\`
+   ```
 
    The bot will guide you through:
    - Adding emoji-role pairs
@@ -125,21 +125,21 @@ python bot.py
 
    Start a chess game against a bot or another user:
 
-   \`\`\`bash
+   ```bash
    !chess_start [@opponent]
-   \`\`\`
+   ```
 
    Make a move using UCI format:
 
-   \`\`\`bash
+   ```bash
    !chess_move e2e4
-   \`\`\`
+   ```
 
 ### Custom Commands
 - **Manage Private Voice Channels (House System)**: Mods and users can manage private voice channels with commands to create, assign, and manage roles:
-   - \`!create_house <house_name>\`
-   - \`!give_key @user\`
-   - \`!take_key @user\`
+   - `!create_house <house_name>`
+   - `!give_key @user`
+   - `!take_key @user`
 
 ### Cheese Jokes
 - Whenever "cheese" is mentioned in any chat, the bot will respond with a cheese joke.
@@ -151,51 +151,51 @@ All actions (warnings, bans, role changes) are logged to the console and can be 
 
 ### 1. Pull Latest Changes
 
-\`\`\`bash
+```bash
 git pull origin main
-\`\`\`
+```
 
 ### 2. Install New Dependencies (if applicable)
 
 If new dependencies were added:
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 ### 3. Restart the Bot
 
-\`\`\`bash
+```bash
 # Stop the running bot
 Ctrl + C  # On Windows or Linux
 Command + C  # On macOS
 
 # Start the bot again
 python bot.py
-\`\`\`
+```
 
 ## How to Start the Bot
 
 1. **Activate the virtual environment:**
 
-   \`\`\`bash
+   ```bash
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-   \`\`\`
+   ```
 
 2. **Run the bot:**
 
-   \`\`\`bash
+   ```bash
    python bot.py
-   \`\`\`
+   ```
 
 ## Troubleshooting
 
 - Ensure you have the proper bot permissions (manage roles, send messages, read messages).
-- Double-check your \`.env\` file to confirm the tokens and client IDs are correct.
+- Double-check your `.env` file to confirm the tokens and client IDs are correct.
 - Make sure all dependencies are installed correctly by running:
 
-   \`\`\`bash
+   ```bash
    pip install -r requirements.txt
-   \`\`\`
+   ```
 
 If issues persist, feel free to open an issue on GitHub or contact the maintainers.
