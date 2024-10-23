@@ -11,6 +11,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Load Cogs (the modular features)
 initial_extensions = [
+    'cogs.server_config',  # Load the server configuration cog
     'cogs.live_notifications',
     'cogs.moderation',
     'cogs.mini_games',
