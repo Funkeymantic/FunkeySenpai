@@ -13,7 +13,7 @@
 - **Private Voice Channels**: Create private voice channels (houses) for users, with commands to manage channel-specific roles.
 - **Logging**: Log all actions and punishments in both Discord and Twitch.
 - **Custom Commands**: Issue Twitch or Discord commands that communicate between multiple bots running on separate computers.
-- **Contests and Game Tracking**: Track game performance through in-game APIs and manage leaderboards.
+- **Multi-Server Support**: The bot can be configured to work across multiple Discord servers, with separate configurations for each server stored in a local `config.json` file.
 
 ## Installation
 
@@ -29,7 +29,7 @@ cd FunkeySenpai
 Create and activate a virtual environment:
 
 ```bash
-python3 -m venv venv
+python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
@@ -62,90 +62,36 @@ TWITCH_CLIENT_ID=your_twitch_client_id
 python bot.py
 ```
 
-## How to Use the FunkeySenpai Bot
+## Multi-Server Support Configuration
 
-### Contests
-- **Create a Contest (Mod-Only):**
+The bot supports multiple Discord servers, with each server having its own configurations (such as channel IDs, category IDs, and roles). These configurations can be managed directly from Discord by server admins using the following commands:
 
-   ```bash
-   !create_contest
-   ```
+### Server Configuration Commands
+- **Set Default Channel**:
+  ```bash
+  !set_channel #channel
+  ```
+  Sets the default channel for bot notifications in the current server.
 
-   The bot will ask for the following details:
-   - Game (e.g., Valorant)
-   - Start date (YYYY-MM-DD)
-   - Duration (e.g., 2 weeks)
-   - Reward (e.g., Steam gift card)
-   - Objective (e.g., most kills)
-   - Group (followers, subscribers, or both)
-   - Rules (comma-separated)
+- **Set Default Category**:
+  ```bash
+  !set_category #category
+  ```
+  Sets the default category for bot-created channels in the current server.
 
-- **Join a Contest:**
+- **Set Default Role**:
+  ```bash
+  !set_role @role
+  ```
+  Sets the default role to be assigned by the bot in the current server.
 
-   Users can join a contest using the `~contest` command followed by their player ID:
+- **Show Current Server Configuration**:
+  ```bash
+  !show_config
+  ```
+  Displays the current server's configuration for channels, categories, and roles.
 
-   ```bash
-   ~contest player_id
-   ```
-
-- **List Contests:**
-
-   ```bash
-   !list_contests
-   ```
-
-- **List Participants (Mod-Only):**
-
-   ```bash
-   !list_participants contest_id
-   ```
-
-### Twitch Notifications
-- Automatically send live notifications to Discord when users with the "streamer" role go live.
-  
-### Auto-Moderation
-- **Auto-warn for bad words**: If a user uses certain words, the bot issues warnings. After two warnings, the bot alerts mods in a dedicated mod channel and deletes the message.
-  
-### Role Management
-- **Setup Reaction Roles (Mod-Only):**
-
-   Use the command to set up a message for users to react to for role assignment:
-
-   ```bash
-   !setup_reaction_roles
-   ```
-
-   The bot will guide you through:
-   - Adding emoji-role pairs
-   - Setting whether users can select multiple roles
-   - Publishing the reaction message in a chosen channel
-  
-### Mini-Games
-- **Play Chess:**
-
-   Start a chess game against a bot or another user:
-
-   ```bash
-   !chess_start [@opponent]
-   ```
-
-   Make a move using UCI format:
-
-   ```bash
-   !chess_move e2e4
-   ```
-
-### Custom Commands
-- **Manage Private Voice Channels (House System)**: Mods and users can manage private voice channels with commands to create, assign, and manage roles:
-   - `!create_house <house_name>`
-   - `!give_key @user`
-   - `!take_key @user`
-
-### Cheese Jokes
-- Whenever "cheese" is mentioned in any chat, the bot will respond with a cheese joke.
-
-## Logging
-All actions (warnings, bans, role changes) are logged to the console and can be tracked in the mod chat.
+These configurations are stored in the local `config.json` file on the machine hosting the bot and are unique to each server the bot is part of.
 
 ## How to Update the Bot
 
@@ -173,20 +119,6 @@ Command + C  # On macOS
 # Start the bot again
 python bot.py
 ```
-
-## How to Start the Bot
-
-1. **Activate the virtual environment:**
-
-   ```bash
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-2. **Run the bot:**
-
-   ```bash
-   python bot.py
-   ```
 
 ## Troubleshooting
 
