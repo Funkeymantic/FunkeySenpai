@@ -1,5 +1,6 @@
 discord.py
-requests
 python-dotenv
+requests
 python-chess
 aiohttp
+schedule

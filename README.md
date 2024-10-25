@@ -15,9 +15,11 @@
 - **Custom Commands**: Issue Twitch or Discord commands that communicate between multiple bots running on separate computers.
 - **Multi-Server Support**: The bot can be configured to work across multiple Discord servers, with separate configurations for each server stored in a local `config.json` file.
 
-## Installation
+## Setup Instructions
 
 ### 1. Clone the Repository
+
+Open a terminal or command prompt, then run:
 
 ```bash
 git clone https://github.com/your-username/FunkeySenpai.git
@@ -26,7 +28,7 @@ cd FunkeySenpai
 
 ### 2. Set up Virtual Environment
 
-Create and activate a virtual environment:
+To keep dependencies isolated, create and activate a virtual environment:
 
 ```bash
 python -m venv venv
@@ -34,6 +36,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 ### 3. Install Required Dependencies
+
+Install the necessary libraries by running:
 
 ```bash
 pip install -r requirements.txt
@@ -44,11 +48,12 @@ The required libraries include:
 - `requests`
 - `python-dotenv`
 - `python-chess`
-- `aiohttp` (for API handling)
+- `aiohttp`
+- `schedule`
 
 ### 4. Environment Setup
 
-Create a `.env` file in the root directory and add your bot tokens and client IDs:
+Create a `.env` file in the root directory to store your bot’s credentials. This file should look like:
 
 ```env
 DISCORD_TOKEN=your_discord_bot_token
@@ -56,17 +61,34 @@ TWITCH_TOKEN=your_twitch_token
 TWITCH_CLIENT_ID=your_twitch_client_id
 ```
 
+Replace the placeholders with your actual Discord bot token and Twitch API credentials.
+
 ### 5. Run the Bot
+
+To run the bot, use the following command in the terminal:
 
 ```bash
 python bot.py
 ```
 
-## Multi-Server Support Configuration
+Make sure the bot starts without any errors.
 
-The bot supports multiple Discord servers, with each server having its own configurations (such as channel IDs, category IDs, and roles). These configurations can be managed directly from Discord by server admins using the following commands:
+## Automatic GitHub Update at 5:00 AM
+
+The bot is now configured to automatically check the time and pull updates from GitHub at 5:00 AM daily. It will restart itself after pulling the updates.
+
+### Testing Automatic GitHub Updates
+
+To test this feature:
+- Set your system's time or modify the `pull_and_restart()` function temporarily to trigger at a closer time for testing.
+- Ensure that the GitHub repository is up to date.
+
+## Configuring for Multiple Servers
+
+The bot supports multiple Discord servers, each with its own unique configurations (such as channel IDs, category IDs, and roles). These configurations are stored in a local `config.json` file and can be managed directly within Discord using the following commands:
 
 ### Server Configuration Commands
+
 - **Set Default Channel**:
   ```bash
   !set_channel #channel
@@ -91,9 +113,9 @@ The bot supports multiple Discord servers, with each server having its own confi
   ```
   Displays the current server's configuration for channels, categories, and roles.
 
-These configurations are stored in the local `config.json` file on the machine hosting the bot and are unique to each server the bot is part of.
+The `config.json` file is generated automatically when you configure your server and will be updated when you run any of these commands.
 
-## How to Update the Bot
+## Updating the Bot
 
 ### 1. Pull Latest Changes
 
@@ -122,12 +144,12 @@ python bot.py
 
 ## Troubleshooting
 
-- Ensure you have the proper bot permissions (manage roles, send messages, read messages).
-- Double-check your `.env` file to confirm the tokens and client IDs are correct.
-- Make sure all dependencies are installed correctly by running:
+- Ensure you have the correct permissions set for the bot (manage roles, send messages, read messages).
+- Verify that the `.env` file contains valid credentials for both Discord and Twitch.
+- Ensure that all dependencies are installed by running:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-If issues persist, feel free to open an issue on GitHub or contact the maintainers.
+If issues persist, feel free to open an issue on GitHub or contact the maintainers for support.
