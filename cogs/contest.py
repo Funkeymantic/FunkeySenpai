@@ -1,14 +1,12 @@
 import discord
 from discord.ext import commands
-import datetime
-import asyncio
+from game_apis import valorant_api, cod_api, satisfactory_api, rocketleague_api, overwatch_api
 
 class ContestManagement(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.active_contests = {}
-        self.contest_participants = {}
-    
+
     @commands.command(name="create_contest")
     @commands.has_permissions(manage_guild=True)
     async def create_contest(self, ctx):
@@ -20,57 +18,36 @@ class ContestManagement(commands.Cog):
         
         try:
             # Get game
-            await ctx.send("What game is the contest for?")
+            await ctx.send("What game is the contest for? (e.g., Valorant, Call of Duty, Satisfactory, Rocket League, Overwatch)")
             game_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
-            game = game_message.content
+            game = game_message.content.lower()
 
-            # Get start date
+            # Get other contest parameters
             await ctx.send("When does the contest start? (format: YYYY-MM-DD)")
             start_date_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
-            start_date = datetime.datetime.strptime(start_date_message.content, "%Y-%m-%d")
+            start_date = start_date_message.content
 
-            # Get duration
-            await ctx.send("How long is the contest duration? (e.g., 5 days, 2 weeks)")
-            duration_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
-            duration = duration_message.content
-
-            # Get reward
-            await ctx.send("What is the reward for winning the contest?")
-            reward_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
-            reward = reward_message.content
-
-            # Get objective
             await ctx.send("What is the contest objective? (e.g., most kills, highest score)")
             objective_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
             objective = objective_message.content
 
-            # Followers or Subscribers
-            await ctx.send("Is this contest for followers, subscribers, or both?")
-            group_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
-            group = group_message.content
+            await ctx.send("What is the reward?")
+            reward_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
+            reward = reward_message.content
 
-            # Get rules (comma-separated)
-            await ctx.send("What are the contest rules? Please separate by commas.")
-            rules_message = await self.bot.wait_for('message', check=check_message, timeout=120.0)
-            rules = rules_message.content.split(',')
-
-            # Store the contest details
             contest_id = len(self.active_contests) + 1
             self.active_contests[contest_id] = {
                 "game": game,
                 "start_date": start_date,
-                "duration": duration,
-                "reward": reward,
                 "objective": objective,
-                "group": group,
-                "rules": rules,
+                "reward": reward,
                 "participants": []
             }
 
-            await ctx.send(f"Contest created successfully for {game}! Contest ID: {contest_id}")
+            await ctx.send(f"Contest created successfully for {game.capitalize()}! Contest ID: {contest_id}")
 
-        except asyncio.TimeoutError:
-            await ctx.send("Contest setup timed out. Please try again.")
+        except Exception as e:
+            await ctx.send(f"Error: {str(e)}")
 
     @commands.command(name="join_contest")
     async def join_contest(self, ctx, contest_id: int, player_id: str):
@@ -80,68 +57,35 @@ class ContestManagement(commands.Cog):
             return
 
         contest = self.active_contests[contest_id]
+        game = contest['game']
         user = ctx.author
 
-        # Check if user already joined
-        if any(participant['discord_id'] == user.id for participant in contest['participants']):
-            await ctx.send("You have already joined this contest!")
+        # Fetch player stats based on game
+        if game == "valorant":
+            player_stats = valorant_api.get_player_stats(player_id)
+        elif game == "call of duty":
+            player_stats = cod_api.get_player_stats(player_id)
+        elif game == "satisfactory":
+            player_stats = satisfactory_api.get_player_stats(player_id)
+        elif game == "rocket league":
+            player_stats = rocketleague_api.get_player_stats(player_id)
+        elif game == "overwatch":
+            player_stats = overwatch_api.get_player_stats(player_id)
+        else:
+            await ctx.send("Unsupported game for contest.")
             return
 
-        # Add user to contest participants
-        participant_data = {
-            "discord_name": str(user),
-            "discord_id": user.id,
-            "player_id": player_id
-        }
-        contest['participants'].append(participant_data)
-
-        await ctx.send(f"{user.mention}, you have successfully joined the contest '{contest['game']}' with Player ID: {player_id}.")
-
-    @commands.command(name="list_contests")
-    async def list_contests(self, ctx):
-        """Command to list all active contests."""
-        if not self.active_contests:
-            await ctx.send("There are no active contests at the moment.")
-            return
-        
-        contest_list = []
-        for contest_id, contest in self.active_contests.items():
-            contest_info = (
-                f"**Contest ID:** {contest_id}\n"
-                f"**Game:** {contest['game']}\n"
-                f"**Start Date:** {contest['start_date'].strftime('%Y-%m-%d')}\n"
-                f"**Duration:** {contest['duration']}\n"
-                f"**Reward:** {contest['reward']}\n"
-                f"**Objective:** {contest['objective']}\n"
-                f"**Group:** {contest['group']}\n"
-                f"**Rules:** {', '.join(contest['rules'])}\n"
-            )
-            contest_list.append(contest_info)
-        
-        await ctx.send("\n\n".join(contest_list))
-
-    @commands.command(name="list_participants")
-    @commands.has_permissions(manage_guild=True)
-    async def list_participants(self, ctx, contest_id: int):
-        """Command to list participants for a given contest."""
-        if contest_id not in self.active_contests:
-            await ctx.send("Invalid contest ID. Please check and try again.")
-            return
-
-        contest = self.active_contests[contest_id]
-        if not contest['participants']:
-            await ctx.send("No participants have joined this contest yet.")
-            return
-
-        participant_list = []
-        for participant in contest['participants']:
-            participant_info = (
-                f"**Discord Name:** {participant['discord_name']}\n"
-                f"**Player ID:** {participant['player_id']}\n"
-            )
-            participant_list.append(participant_info)
-
-        await ctx.send(f"Participants for contest '{contest['game']}':\n\n" + "\n\n".join(participant_list))
+        # Add player to the contest if stats are fetched successfully
+        if player_stats:
+            contest['participants'].append({
+                "discord_name": str(user),
+                "discord_id": user.id,
+                "player_id": player_id,
+                "stats": player_stats
+            })
+            await ctx.send(f"{user.mention}, you have successfully joined the contest '{game.capitalize()}' with Player ID: {player_id}.")
+        else:
+            await ctx.send(f"Failed to fetch stats for Player ID: {player_id} in '{game.capitalize()}'.")
 
 def setup(bot):
     bot.add_cog(ContestManagement(bot))

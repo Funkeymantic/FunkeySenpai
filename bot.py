@@ -1,14 +1,17 @@
 import discord
 from discord.ext import commands
 import os
-import time
 import schedule
-from datetime import datetime
 import subprocess
+from datetime import datetime
+import sys
 
 # Initialize the bot
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
+
+# Replace this with your own Discord user ID to receive DMs
+YOUR_USER_ID = 223688811845124096  # Replace with your Discord user ID
 
 # Load your cogs (if any)
 initial_extensions = [
@@ -19,6 +22,21 @@ initial_extensions = [
 if __name__ == '__main__':
     for extension in initial_extensions:
         bot.load_extension(extension)
+
+# Error handler to send DM on errors
+@bot.event
+async def on_command_error(ctx, error):
+    """Handles errors globally and sends a DM to the specified user with the error details."""
+    user = await bot.fetch_user(YOUR_USER_ID)  # Fetch your Discord user
+    error_message = f"An error occurred in the bot:\n{str(error)}"
+    
+    # Send error message as a DM to you
+    if user:
+        await user.send(error_message)
+    
+    # Optionally, send error message in the channel where it occurred
+    await ctx.send("An error occurred. The bot owner has been notified.")
+    raise error
 
 # Define the task to pull from GitHub and restart the bot
 def pull_and_restart():
