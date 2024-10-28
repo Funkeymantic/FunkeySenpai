@@ -17,7 +17,16 @@ YOUR_USER_ID = 223688811845124096  # Replace with your Discord user ID
 # Load your cogs (if any)
 initial_extensions = [
     'cogs.server_config',
-    # Add other cogs here
+    'cogs.schedule',
+    'cogs.socials',
+    'cogs.gear',
+    'cogs.loyalty',
+    'cogs.polls',
+    'cogs.greetings',
+    'cogs.quotes',
+    'cogs.moderation',
+    'cogs.alerts',
+    'cogs.todo'
 ]
 
 if __name__ == '__main__':

@@ -4,3 +4,6 @@ requests
 python-chess
 aiohttp
 schedule
+google-auth
+google-auth-oauthlib
+google-auth-httplib2

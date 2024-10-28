@@ -6,18 +6,14 @@ class Moderation(commands.Cog):
         self.bot = bot
         self.warnings = {}
 
-    async def check_for_bad_words(self, message):
-        # Check message content for forbidden words
-        pass
-
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        await self.check_for_bad_words(message)
-
     @commands.command(name="warn")
-    async def warn_user(self, ctx, member: discord.Member):
-        # Warn a user
-        pass
+    async def warn(self, ctx, user: discord.User, *, reason=None):
+        await ctx.send(f"{user.mention} has been warned for: {reason}")
+
+    @commands.command(name="kick")
+    async def kick(self, ctx, member: discord.Member, *, reason=None):
+        await member.kick(reason=reason)
+        await ctx.send(f"{member.mention} has been kicked for: {reason}")
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
