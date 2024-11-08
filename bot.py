@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 import os
 import schedule
 import subprocess
@@ -7,9 +8,16 @@ from datetime import datetime
 import sys
 import time
 
+load_dotenv()  # This loads environment variables from the .env file
+
+discord_token = os.getenv("DISCORD_TOKEN")
+if not discord_token:
+    raise ValueError("DISCORD_TOKEN not found in environment variables")
+
+
 # Initialize the bot
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="~", intents=intents)
 
 # Replace this with your own Discord user ID to receive DMs
 YOUR_USER_ID = 223688811845124096  # Replace with your Discord user ID
@@ -76,4 +84,4 @@ import threading
 threading.Thread(target=run_schedule, daemon=True).start()
 
 # Run the bot
-bot.run(os.getenv("DISCORD_TOKEN"))
+bot.run(discord_token)

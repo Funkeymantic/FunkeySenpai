@@ -20,11 +20,11 @@ discord_bot = commands.Bot(command_prefix='~', intents=intents, case_insensitive
 @commands.has_role('Dungeon Master', 'Deities')
 async def createhouse(ctx, channel_name: str, user: discord.Member):
     fancy_channel_name = ''.join(fancy_font.get(char, char) for char in channel_name)
-    category = discord.utils.get(ctx.guild.categories, name='𝕋ℝ𝔼𝔼 ℍ𝕆𝕌𝕊𝔼')
+    category = discord.utils.get(ctx.guild.categories, name='𝗧𝗿𝗲𝗲 𝗛𝗼𝘂𝘀𝗲')
     
     # Create category if it doesn't exist
     if category is None:
-        category = await ctx.guild.create_category('𝕋ℝ𝔼𝔼 ℍ𝕆𝕌𝕊𝔼')
+        category = await ctx.guild.create_category('𝗧𝗿𝗲𝗲 𝗛𝗼𝘂𝘀𝗲')
     
     # Create the voice channel in the category
     voice_channel = await ctx.guild.create_voice_channel(fancy_channel_name, category=category)
