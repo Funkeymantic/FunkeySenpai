@@ -1,11 +1,11 @@
+from discord.ext import commands
 import discord
 import json
-from discord.ext import commands
 
 class ServerConfig(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config_file = 'config.json'
+        self.config_file = 'server_config.json'  # Ensure this path is correct
 
     def load_config(self):
         """Load the server configurations from file."""
@@ -81,5 +81,6 @@ class ServerConfig(commands.Cog):
                        f"Category: {category.name if category else 'Not set'}\n"
                        f"Role: {role.name if role else 'Not set'}")
 
-def setup(bot):
-    bot.add_cog(ServerConfig(bot))
+async def setup(bot):
+    """Setup function to add the cog to the bot."""
+    await bot.add_cog(ServerConfig(bot))

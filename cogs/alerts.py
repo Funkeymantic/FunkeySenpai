@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class Alerts(commands.Cog):
+class alerts(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.custom_alerts = {
@@ -18,5 +18,6 @@ class Alerts(commands.Cog):
         else:
             await ctx.send("Invalid alert type. Choose from 'follow', 'subscribe', 'donation'.")
 
-def setup(bot):
-    bot.add_cog(Alerts(bot))
+async def setup(bot):
+    """Setup function to add the cog to the bot."""
+    await bot.add_cog(alerts(bot))

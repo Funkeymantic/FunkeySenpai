@@ -15,5 +15,5 @@ class Moderation(commands.Cog):
         await member.kick(reason=reason)
         await ctx.send(f"{member.mention} has been kicked for: {reason}")
 
-def setup(bot):
-    bot.add_cog(Moderation(bot))
+async def setup(bot):
+    await bot.add_cog(Moderation(bot))

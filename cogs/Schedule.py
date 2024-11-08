@@ -5,7 +5,7 @@ import os
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 
-class Schedule(commands.Cog):
+class schedule(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -29,5 +29,5 @@ class Schedule(commands.Cog):
         
         await ctx.send(f"Upcoming schedule:\n{event_list}")
 
-def setup(bot):
-    bot.add_cog(Schedule(bot))
+async def setup(bot):
+    await bot.add_cog(schedule(bot))

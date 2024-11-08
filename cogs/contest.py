@@ -87,5 +87,6 @@ class ContestManagement(commands.Cog):
         else:
             await ctx.send(f"Failed to fetch stats for Player ID: {player_id} in '{game.capitalize()}'.")
 
-def setup(bot):
-    bot.add_cog(ContestManagement(bot))
+async def setup(bot):
+    """Setup function to add the cog to the bot."""
+    await bot.add_cog(ContestManagement(bot))

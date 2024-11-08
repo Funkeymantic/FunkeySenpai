@@ -11,5 +11,5 @@ class Poll(commands.Cog):
         await message.add_reaction("👍")
         await message.add_reaction("👎")
 
-def setup(bot):
-    bot.add_cog(Poll(bot))
+async def setup(bot):
+    await bot.add_cog(Poll(bot))

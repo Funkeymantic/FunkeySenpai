@@ -109,5 +109,5 @@ class ChessGame(commands.Cog):
 
         await ctx.send(f"{ctx.author.mention} has resigned. Game over!")
 
-def setup(bot):
-    bot.add_cog(ChessGame(bot))
+async def setup(bot):
+    await bot.add_cog(ChessGame(bot))

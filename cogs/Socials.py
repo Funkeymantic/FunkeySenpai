@@ -15,5 +15,5 @@ class Socials(commands.Cog):
         links = "\n".join([f"{platform}: {url}" for platform, url in self.social_links.items()])
         await ctx.send(f"Follow on social media:\n{links}")
 
-def setup(bot):
-    bot.add_cog(Socials(bot))
+async def setup(bot):
+    await bot.add_cog(Socials(bot))

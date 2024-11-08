@@ -128,5 +128,5 @@ class RoleManagement(commands.Cog):
                 await member.send(f"The {role.name} role has been removed from you!")
                 break
 
-def setup(bot):
-    bot.add_cog(RoleManagement(bot))
+async def setup(bot):
+    await bot.add_cog(RoleManagement(bot))

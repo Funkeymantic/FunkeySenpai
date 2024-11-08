@@ -25,5 +25,5 @@ class Loyalty(commands.Cog):
         self.conn.commit()
         await ctx.send(f"Added {points} points to {ctx.author.mention}.")
 
-def setup(bot):
-    bot.add_cog(Loyalty(bot))
+async def setup(bot):
+    await bot.add_cog(Loyalty(bot))

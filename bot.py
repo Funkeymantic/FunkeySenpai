@@ -1,5 +1,5 @@
-import discord
 from discord.ext import commands
+import discord
 from dotenv import load_dotenv
 import os
 import schedule
@@ -7,45 +7,53 @@ import subprocess
 from datetime import datetime
 import sys
 import time
+import asyncio
+import threading
 
-load_dotenv()  # This loads environment variables from the .env file
+load_dotenv()  # Load environment variables from .env
 
 discord_token = os.getenv("DISCORD_TOKEN")
 if not discord_token:
     raise ValueError("DISCORD_TOKEN not found in environment variables")
-
 
 # Initialize the bot
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="~", intents=intents)
 
 # Replace this with your own Discord user ID to receive DMs
-YOUR_USER_ID = 223688811845124096  # Replace with your Discord user ID
+YOUR_USER_ID = 223688811845124096  # Replace with your actual Discord user ID
 
-# Load your cogs (if any)
+# List of cogs to load
 initial_extensions = [
     'cogs.server_config',
     'cogs.schedule',
     'cogs.socials',
     'cogs.gear',
     'cogs.loyalty',
+    'cogs.logging',
     'cogs.polls',
     'cogs.greetings',
     'cogs.quotes',
     'cogs.moderation',
     'cogs.alerts',
-    'cogs.todo'
+    'cogs.todo',
+    'cogs.Discord_Commands'  # Ensure the path matches the directory structure
 ]
 
-if __name__ == '__main__':
+async def load_extensions():
+    """Load all the initial extensions."""
     for extension in initial_extensions:
-        bot.load_extension(extension)
+        try:
+            await bot.load_extension(extension)
+            print(f'Loaded extension: {extension}')
+        except Exception as e:
+            print(f'Failed to load extension {extension}: {e}')
 
 # Error handler to send DM on errors
 @bot.event
 async def on_command_error(ctx, error):
     """Handles errors globally and sends a DM to the specified user with the error details."""
-    user = await bot.fetch_user(YOUR_USER_ID)  # Fetch your Discord user
+    user = await bot.fetch_user(YOUR_USER_ID)
     error_message = f"An error occurred in the bot:\n{str(error)}"
     
     # Send error message as a DM to you
@@ -56,7 +64,7 @@ async def on_command_error(ctx, error):
     await ctx.send("An error occurred. The bot owner has been notified.")
     raise error
 
-# Define the task to pull from GitHub and restart the bot
+# Task to pull from GitHub and restart the bot
 def pull_and_restart():
     current_time = datetime.now().strftime("%H:%M")
     if current_time == "05:00":  # Check if it's 5:00 AM
@@ -80,8 +88,12 @@ def run_schedule():
         time.sleep(1)
 
 # Start the scheduling in a separate thread
-import threading
 threading.Thread(target=run_schedule, daemon=True).start()
 
+async def main():
+    """Main function to start the bot and load extensions."""
+    await load_extensions()
+    await bot.start(discord_token)
+
 # Run the bot
-bot.run(discord_token)
+asyncio.run(main())

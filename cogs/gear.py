@@ -15,5 +15,5 @@ class Gear(commands.Cog):
         setup = "\n".join([f"{item}: {detail}" for item, detail in self.gear.items()])
         await ctx.send(f"Streamer Setup:\n{setup}")
 
-def setup(bot):
-    bot.add_cog(Gear(bot))
+async def setup(bot):
+    await bot.add_cog(Gear(bot))

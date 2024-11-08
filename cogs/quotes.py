@@ -1,4 +1,5 @@
 import discord
+import sqlite3
 from discord.ext import commands
 
 class Quotes(commands.Cog):
@@ -19,5 +20,5 @@ class Quotes(commands.Cog):
             row = self.cur.fetchone()
             await ctx.send(row[0] if row else "No quotes available.")
 
-def setup(bot):
-    bot.add_cog(Quotes(bot))
+async def setup(bot):
+    await bot.add_cog(Quotes(bot))

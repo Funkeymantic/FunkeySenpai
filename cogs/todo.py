@@ -19,5 +19,5 @@ class ToDoList(commands.Cog):
             tasks = "\n".join(f"{idx + 1}. {task}" for idx, task in enumerate(self.todo_list))
             await ctx.send(f"To-do list:\n{tasks}")
 
-def setup(bot):
-    bot.add_cog(ToDoList(bot))
+async def setup(bot):
+    await bot.add_cog(ToDoList(bot))

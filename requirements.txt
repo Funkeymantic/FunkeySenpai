@@ -1,11 +1,26 @@
-discord.py
-python-dotenv
-requests
-python-chess
-aiohttp
-schedule
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
-audioop-lts
-schedule
+# Ensure all necessary packages for the bot and cogs are included in requirements.txt
+
+discord.py>=2.0.0  # Discord library for creating bots
+python-dotenv>=0.21.0  # For loading environment variables from .env files
+schedule>=1.1.0  # For scheduling tasks
+
+# Additional libraries that may be required by the uploaded cogs:
+requests>=2.31.0  # For making HTTP requests (used in APIs)
+aiohttp>=3.8.1  # Asynchronous HTTP client for API calls
+beautifulsoup4>=4.12.2  # For parsing HTML content if scraping is needed
+lxml>=4.9.3  # Parser for BeautifulSoup, optional but recommended
+pytz>=2023.3  # For timezone handling if needed
+
+# Google and OAuth libraries for API authentication
+google-auth>=2.19.1  # For Google authentication
+google-auth-oauthlib>=0.4.6  # For OAuth 2.0 support with Google APIs
+google-auth-httplib2>=0.1.0  # For HTTP support with Google authentication
+google-api-python-client>=2.87.0  # For accessing Google APIs
+
+# Game API specific libraries
+pandas>=2.0.0  # For handling data structures if needed
+bs4>=0.0.1  # Alias for BeautifulSoup, may be redundant but included for clarity
+
+# Utility and helper modules
+pytest>=7.2.0  # For running tests, if applicable
+loguru>=0.6.0  # Advanced logging functionality

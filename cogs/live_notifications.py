@@ -15,5 +15,5 @@ class LiveNotifications(commands.Cog):
     async def on_ready(self):
         await self.refresh_twitch_users()
 
-def setup(bot):
-    bot.add_cog(LiveNotifications(bot))
+async def setup(bot):
+    await bot.add_cog(LiveNotifications(bot))
