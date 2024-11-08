@@ -72,7 +72,7 @@ async def on_command_error(ctx, error):
 # Task to pull from GitHub and restart the bot
 def pull_and_restart():
     current_time = datetime.now().strftime("%H:%M")
-    if current_time == "05:00":  # Check if it's 5:00 AM
+    if current_time == "11:20":  # Check if it's 5:00 AM
         logging.info("Initiating Git pull and restart process at 5:00 AM.")
         
         # Pull the latest changes from the repository
@@ -82,7 +82,7 @@ def pull_and_restart():
             
             # Restart the bot
             logging.info("Restarting bot...")
-            os.execv(sys.executable, [sys.executable] + sys.argv)
+            os.execv(sys.executable, [f'"{sys.executable}"'] + sys.argv)
         except subprocess.CalledProcessError as e:
             logging.error(f"Error during Git pull: {e.stderr}")
         except Exception as e:
