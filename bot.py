@@ -9,6 +9,10 @@ import sys
 import time
 import asyncio
 import threading
+import logging
+
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 load_dotenv()  # Load environment variables from .env
 
@@ -45,9 +49,9 @@ async def load_extensions():
     for extension in initial_extensions:
         try:
             await bot.load_extension(extension)
-            print(f'Loaded extension: {extension}')
+            logging.info(f'Loaded extension: {extension}')
         except Exception as e:
-            print(f'Failed to load extension {extension}: {e}')
+            logging.error(f'Failed to load extension {extension}: {e}')
 
 # Error handler to send DM on errors
 @bot.event
@@ -55,6 +59,7 @@ async def on_command_error(ctx, error):
     """Handles errors globally and sends a DM to the specified user with the error details."""
     user = await bot.fetch_user(YOUR_USER_ID)
     error_message = f"An error occurred in the bot:\n{str(error)}"
+    logging.error(error_message)
     
     # Send error message as a DM to you
     if user:
@@ -68,21 +73,28 @@ async def on_command_error(ctx, error):
 def pull_and_restart():
     current_time = datetime.now().strftime("%H:%M")
     if current_time == "05:00":  # Check if it's 5:00 AM
-        print("Pulling latest changes from GitHub...")
+        logging.info("Initiating Git pull and restart process at 5:00 AM.")
         
         # Pull the latest changes from the repository
-        result = subprocess.run(["git", "pull"], capture_output=True, text=True)
-        print(result.stdout)
-        
-        # Restart the bot
-        print("Restarting bot...")
-        os.execv(sys.executable, ['python'] + sys.argv)
+        try:
+            result = subprocess.run(["git", "pull"], capture_output=True, text=True, check=True)
+            logging.info(f"Git pull output: {result.stdout}")
+            
+            # Restart the bot
+            logging.info("Restarting bot...")
+            os.execv(sys.executable, ['python'] + sys.argv)
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Error during Git pull: {e.stderr}")
+        except Exception as e:
+            logging.error(f"Unexpected error during restart: {str(e)}")
 
 # Schedule the task to run every minute to check for 5:00 AM
 schedule.every().minute.do(pull_and_restart)
+logging.info("Scheduled Git pull and restart at 5:00 AM.")
 
 # Function to run the schedule in the background
 def run_schedule():
+    logging.info("Starting the scheduling thread.")
     while True:
         schedule.run_pending()
         time.sleep(1)
