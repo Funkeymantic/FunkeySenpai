@@ -82,7 +82,7 @@ def pull_and_restart():
             
             # Restart the bot
             logging.info("Restarting bot...")
-            os.execv(sys.executable, ['python'] + sys.argv)
+            os.execv(sys.executable, [sys.executable] + sys.argv)
         except subprocess.CalledProcessError as e:
             logging.error(f"Error during Git pull: {e.stderr}")
         except Exception as e:
