@@ -71,7 +71,7 @@ async def on_command_error(ctx, error):
     raise error
 
 
-openai.api_key = os.getenv("open_api_key")
+openai.api_key = os.getenv("OPEN_API_KEY")
 
 @bot.command()
 async def ai_chat(ctx, *, message):
