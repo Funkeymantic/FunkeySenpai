@@ -25,3 +25,5 @@ bs4>=0.0.1  # Alias for BeautifulSoup, may be redundant but included for clarity
 pytest>=7.2.0  # For running tests, if applicable
 loguru>=0.6.0  # Advanced logging functionality
 pynacl>=1.5.0  # Required for voice support in Discord bots
+openai>=0.10.0
+transformers>=4.0.0
