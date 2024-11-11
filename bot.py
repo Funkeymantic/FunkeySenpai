@@ -10,6 +10,7 @@ import time
 import asyncio
 import threading
 import logging
+import openai
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -68,6 +69,19 @@ async def on_command_error(ctx, error):
     # Optionally, send error message in the channel where it occurred
     await ctx.send("An error occurred. The bot owner has been notified.")
     raise error
+
+
+openai.api_key = os.getenv("open_api_key")
+
+@bot.command()
+async def ai_chat(ctx, *, message):
+    response = openai.Completion.create(
+        engine="davinci",
+        prompt=message,
+        max_tokens=150
+    )
+    await ctx.send(response.choices[0].text.strip())
+
 
 # Task to pull from GitHub and restart the bot
 def pull_and_restart():
