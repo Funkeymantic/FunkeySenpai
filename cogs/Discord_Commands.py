@@ -2,15 +2,32 @@ from discord.ext import commands
 import discord
 import os
 from utils.discord_helpers import timestamp, fancy_font
-
+import sys
+import subprocess
 
 class OfficeManagement(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # @commands.command()
-    # async def hello(self, ctx):
-    #     await ctx.send('Hello!')
+# Shutdown command, restricted to moderators
+    @commands.command(name="shutdown")
+    @commands.has_any_role('Dungeon Master', 'Deities')
+    async def shutdown(self, ctx):
+        await ctx.send("Shutting down the bot...")
+        await self.bot.close()
+
+    # Restart command, restricted to moderators
+    @commands.command(name="restart")
+    @commands.has_any_role('Dungeon Master', 'Deities')
+    async def restart(self, ctx):
+        await ctx.send("Pulling latest changes from GitHub and restarting the bot...")
+
+        # Pull the latest changes from the repository
+        result = subprocess.run(["git", "pull"], capture_output=True, text=True)
+        await ctx.send(f"Git pull output:\n{result.stdout}")
+        
+        # Restart the bot
+        os.execv(sys.executable, [sys.executable] + sys.argv)
 
     # Command for new Office (TREE HOUSE)
     @commands.command()
