@@ -4,6 +4,7 @@ import os
 from utils.discord_helpers import timestamp, fancy_font
 import sys
 import subprocess
+import random
 
 class OfficeManagement(commands.Cog):
     def __init__(self, bot):
@@ -25,10 +26,29 @@ class OfficeManagement(commands.Cog):
         # Pull the latest changes from the repository
         result = subprocess.run(["git", "pull"], capture_output=True, text=True)
         await ctx.send(f"Git pull output:\n{result.stdout}")
+
+        # Install requirements
+        install_result = subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
+        await ctx.send(f"Pip install output:\n{install_result.stdout}")
+
         
         # Restart the bot
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
+    @commands.command(name="roll")
+    async def roll(self, ctx, dice: str):
+        """Rolls a dice. Use formats like d6, d20, d100."""
+        try:
+            # Extract the number of sides from the dice format (e.g., "d20")
+            sides = int(dice[1:])
+            if sides in [2, 4, 6, 8, 10, 20, 100]:
+                result = random.randint(1, sides)
+                await ctx.send(f"{ctx.author.mention} rolled a {dice}: **{result}**")
+            else:
+                await ctx.send("Invalid dice type! Use one of: d2, d4, d6, d8, d10, d20, d100.")
+        except ValueError:
+            await ctx.send("Invalid format! Please use the format like d20, d6, etc.")
+    
     # Command for new Office (TREE HOUSE)
     @commands.command()
     @commands.has_any_role('Dungeon Master', 'Deities')

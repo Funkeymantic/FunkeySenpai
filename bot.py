@@ -42,6 +42,7 @@ initial_extensions = [
     'cogs.moderation',
     'cogs.alerts',
     'cogs.todo',
+    'cogs.Twitch_Commands',
     'cogs.Discord_Commands'  # Ensure the path matches the directory structure
 ]
 

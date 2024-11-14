@@ -27,3 +27,4 @@ loguru>=0.6.0  # Advanced logging functionality
 pynacl>=1.5.0  # Required for voice support in Discord bots
 openai>=0.10.0
 transformers>=4.0.0
+twitch.io>=2.10.0
