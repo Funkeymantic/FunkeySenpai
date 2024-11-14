@@ -1,5 +1,6 @@
 from discord.ext import commands
 from twitchio.ext import commands as twitch_commands
+from dotenv import load_dotenv
 import discord
 import os
 import schedule
