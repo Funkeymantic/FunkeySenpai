@@ -9,7 +9,6 @@ class TwitchCommands(twitch_commands.Cog):
     async def roll(self, ctx, dice: str):
         """Rolls a dice. Use formats like d6, d20, d100."""
         try:
-            # Extract the number of sides from the dice format
             sides = int(dice[1:])
             if sides in [2, 4, 6, 8, 10, 20, 100]:
                 result = random.randint(1, sides)
