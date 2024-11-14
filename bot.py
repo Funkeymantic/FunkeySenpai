@@ -12,6 +12,7 @@ import asyncio
 import threading
 import logging
 import openai
+import random
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,7 +28,28 @@ openai.api_key = os.getenv("OPEN_API_KEY")
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="~", intents=intents)
 
-# Discord bot extensions
+# Initialize the Twitch bot as a subclass
+class TwitchBot(twitch_commands.Bot):
+    def __init__(self):
+        super().__init__(token=twitch_token, prefix="!", initial_channels=[twitch_channel])
+
+    @twitch_commands.command(name="roll")
+    async def roll(self, ctx, dice: str):
+        """Rolls a dice. Use formats like d6, d20, d100."""
+        try:
+            sides = int(dice[1:])
+            if sides in [2, 4, 6, 8, 10, 20, 100]:
+                result = random.randint(1, sides)
+                await ctx.send(f"{ctx.author.name} rolled a {dice}: {result}")
+            else:
+                await ctx.send("Invalid dice type! Use one of: d2, d4, d6, d8, d10, d20, d100.")
+        except ValueError:
+            await ctx.send("Invalid format! Please use the format like d20, d6, etc.")
+
+# Instantiate the Twitch bot
+twitch_bot = TwitchBot()
+
+# Load Discord bot extensions
 initial_extensions = [
     'cogs.server_config',
     'cogs.schedule',
@@ -53,7 +75,7 @@ async def load_extensions():
         except Exception as e:
             logging.error(f'Failed to load extension {extension}: {e}')
     
-    # Load the Twitch cog
+    # Load the Twitch cog as well
     await bot.load_extension('cogs.Twitch_Commands')
 
 # Error handler for Discord bot
@@ -103,6 +125,11 @@ threading.Thread(target=run_schedule, daemon=True).start()
 # Main function to start both Discord and Twitch bots
 async def main():
     await load_extensions()
+    
+    # Start Twitch bot in background
+    bot.loop.create_task(twitch_bot.start())
+    
+    # Start Discord bot
     await bot.start(discord_token)
 
 # Run the main function
