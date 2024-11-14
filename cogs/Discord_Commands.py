@@ -6,7 +6,7 @@ import sys
 import subprocess
 import random
 
-class DiscordCommands(commands.Cog):
+class OfficeManagement(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -21,22 +21,17 @@ class DiscordCommands(commands.Cog):
     @commands.command(name="restart")
     @commands.has_any_role('Dungeon Master', 'Deities')
     async def restart(self, ctx):
-        await ctx.send("Pulling latest changes from GitHub, installing requirements, then restarting the bot...")
+        await ctx.send("Pulling latest changes from GitHub and restarting the bot...")
 
         # Pull the latest changes from the repository
         result = subprocess.run(["git", "pull"], capture_output=True, text=True)
-        git_output = result.stdout
-        if len(git_output) > 2000:
-            git_output = git_output[:1997] + "..."
-        await ctx.send(f"Git pull output:\n{git_output}")
-        
+        await ctx.send(f"Git pull output:\n{result.stdout}")
+
         # Install requirements
         install_result = subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
-        pip_output = install_result.stdout
-        if len(pip_output) > 2000:
-            pip_output = pip_output[:1997] + "..."
-        await ctx.send(f"Pip install output:\n{pip_output}")
+        await ctx.send(f"Pip install output:\n{install_result.stdout}")
 
+        
         # Restart the bot
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
@@ -135,4 +130,4 @@ class DiscordCommands(commands.Cog):
 
 # Setup function to add the cog
 async def setup(bot):
-    await bot.add_cog(DiscordCommands(bot))
+    await bot.add_cog(OfficeManagement(bot))
