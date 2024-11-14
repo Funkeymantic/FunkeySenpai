@@ -1,9 +1,15 @@
+from discord.ext import commands  # Use Discord's commands for the cog
 from twitchio.ext import commands as twitch_commands
 import random
 
-class TwitchCommands(twitch_commands.Cog):
+class TwitchCommands(commands.Cog):  # Inherit from discord.ext.commands.Cog
     def __init__(self, bot):
         self.bot = bot  # Reference to the main bot instance
+        self.twitch_bot = twitch_commands.Bot(
+            token=os.getenv("TWITCH_OAUTH_TOKEN"), 
+            prefix="~", 
+            initial_channels=[os.getenv("TWITCH_CHANNEL")]
+        )
 
     @twitch_commands.command(name="roll")
     async def roll(self, ctx, dice: str):
@@ -18,5 +24,11 @@ class TwitchCommands(twitch_commands.Cog):
         except ValueError:
             await ctx.send("Invalid format! Please use the format like d20, d6, etc.")
 
+    async def start_twitch_bot(self):
+        await self.twitch_bot.start()  # Start the Twitch bot
+
+# Setup function to add the cog
 async def setup(bot):
-    await bot.add_cog(TwitchCommands(bot))
+    twitch_commands_cog = TwitchCommands(bot)
+    await bot.add_cog(twitch_commands_cog)
+    bot.loop.create_task(twitch_commands_cog.start_twitch_bot())  # Run the Twitch bot in an async task
