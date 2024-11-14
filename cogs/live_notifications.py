@@ -7,6 +7,7 @@ class LiveNotifications(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.streamers = {}  # Store streamer data
+        self.live_messages = {}  # Track live message IDs by streamer
         self.performance_role_name = "Performance Check"
         self.own_channel_id = int(os.getenv("OWN_CHANNEL_ID"))  # Channel for Funkeymantic
         self.performance_channel_id = int(os.getenv("PERFORMANCE_CHANNEL_ID"))  # Channel for other streamers
@@ -52,16 +53,32 @@ class LiveNotifications(commands.Cog):
         
         for streamer_name, member in self.streamers.items():
             is_live = await self.check_if_live(streamer_name)
-            if is_live:
-                if streamer_name.lower() == "funkeymantic":
-                    # Post to your own channel
-                    channel = self.bot.get_channel(self.own_channel_id)
-                else:
-                    # Post to performance check channel
-                    channel = self.bot.get_channel(self.performance_channel_id)
 
-                if channel:
-                    await channel.send(f"{streamer_name} is now live! Check it out at https://twitch.tv/{streamer_name}")
+            # Check where to post based on the streamer
+            if streamer_name.lower() == "funkeymantic":
+                channel_id = self.own_channel_id
+            else:
+                channel_id = self.performance_channel_id
+            
+            channel = self.bot.get_channel(channel_id)
+
+            # Handle live notifications
+            if is_live:
+                # If the streamer just went live, post a message
+                if streamer_name not in self.live_messages:
+                    if channel:
+                        message = await channel.send(f"{streamer_name} is now live! Check it out at https://twitch.tv/{streamer_name}")
+                        self.live_messages[streamer_name] = message.id  # Save message ID to delete later
+            else:
+                # If the streamer just went offline, delete the message
+                if streamer_name in self.live_messages:
+                    message_id = self.live_messages.pop(streamer_name)
+                    try:
+                        message = await channel.fetch_message(message_id)
+                        await message.delete()
+                        print(f"Deleted live notification for {streamer_name}")
+                    except discord.NotFound:
+                        print(f"Live notification for {streamer_name} already deleted")
 
     @commands.Cog.listener()
     async def on_ready(self):
