@@ -1,3 +1,4 @@
+import os  # Add this import
 from discord.ext import commands  # Use Discord's commands for the cog
 from twitchio.ext import commands as twitch_commands
 import random
@@ -7,7 +8,7 @@ class TwitchCommands(commands.Cog):  # Inherit from discord.ext.commands.Cog
         self.bot = bot  # Reference to the main bot instance
         self.twitch_bot = twitch_commands.Bot(
             token=os.getenv("TWITCH_OAUTH_TOKEN"), 
-            prefix="~", 
+            prefix="!", 
             initial_channels=[os.getenv("TWITCH_CHANNEL")]
         )
 
