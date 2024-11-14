@@ -1,11 +1,11 @@
-from twitchio.ext import commands
+from twitchio.ext import commands as twitch_commands
 import random
 
-class TwitchCommands(commands.Bot):
-    def __init__(self):
-        super().__init__(token='your_twitch_oauth_token', prefix='!', initial_channels=['your_channel_name'])
+class TwitchCommands(twitch_commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot  # Reference to the main bot instance
 
-    @commands.command(name="roll")
+    @twitch_commands.command(name="roll")
     async def roll(self, ctx, dice: str):
         """Rolls a dice. Use formats like d6, d20, d100."""
         try:
@@ -19,6 +19,5 @@ class TwitchCommands(commands.Bot):
         except ValueError:
             await ctx.send("Invalid format! Please use the format like d20, d6, etc.")
 
-# Setup function to add the cog
 async def setup(bot):
     await bot.add_cog(TwitchCommands(bot))
