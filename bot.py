@@ -28,7 +28,7 @@ openai.api_key = os.getenv("OPEN_API_KEY")
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="~", intents=intents)
 
-# Initialize the Twitch bot as a subclass
+# Twitch Bot Class
 class TwitchBot(twitch_commands.Bot):
     def __init__(self):
         super().__init__(token=twitch_token, prefix="!", initial_channels=[twitch_channel])
@@ -67,16 +67,13 @@ initial_extensions = [
 ]
 
 async def load_extensions():
-    """Load all the initial extensions, including Twitch cog."""
+    """Load all the initial extensions."""
     for extension in initial_extensions:
         try:
             await bot.load_extension(extension)
             logging.info(f'Loaded extension: {extension}')
         except Exception as e:
             logging.error(f'Failed to load extension {extension}: {e}')
-    
-    # Load the Twitch cog as well
-    await bot.load_extension('cogs.Twitch_Commands')
 
 # Error handler for Discord bot
 @bot.event
@@ -122,14 +119,15 @@ def run_schedule():
         time.sleep(1)
 threading.Thread(target=run_schedule, daemon=True).start()
 
+# Setup hook to start Twitch bot
+@bot.event
+async def setup_hook():
+    # Start Twitch bot in the background
+    bot.loop.create_task(twitch_bot.start())
+
 # Main function to start both Discord and Twitch bots
 async def main():
     await load_extensions()
-    
-    # Start Twitch bot in background
-    bot.loop.create_task(twitch_bot.start())
-    
-    # Start Discord bot
     await bot.start(discord_token)
 
 # Run the main function
