@@ -6,7 +6,7 @@ import sys
 import subprocess
 import random
 
-class OfficeManagement(commands.Cog):
+class DiscordCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -135,4 +135,4 @@ class OfficeManagement(commands.Cog):
 
 # Setup function to add the cog
 async def setup(bot):
-    await bot.add_cog(OfficeManagement(bot))
+    await bot.add_cog(DiscordCommands(bot))
