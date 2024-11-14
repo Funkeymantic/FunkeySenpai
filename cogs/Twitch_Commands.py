@@ -1,7 +1,7 @@
 from twitchio.ext import commands
 import random
 
-class TwitchBot(commands.Bot):
+class TwitchCommands(commands.Bot):
     def __init__(self):
         super().__init__(token='your_twitch_oauth_token', prefix='!', initial_channels=['your_channel_name'])
 
@@ -21,4 +21,4 @@ class TwitchBot(commands.Bot):
 
 # Setup function to add the cog
 async def setup(bot):
-    await bot.add_cog(TwitchBot(bot))
+    await bot.add_cog(TwitchCommands(bot))
