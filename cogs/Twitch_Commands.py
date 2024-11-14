@@ -1,7 +1,7 @@
 from twitchio.ext import commands
 import random
 
-class TwitchDiceBot(commands.Bot):
+class TwitchBot(commands.Bot):
     def __init__(self):
         super().__init__(token='your_twitch_oauth_token', prefix='!', initial_channels=['your_channel_name'])
 
@@ -19,6 +19,6 @@ class TwitchDiceBot(commands.Bot):
         except ValueError:
             await ctx.send("Invalid format! Please use the format like d20, d6, etc.")
 
-if __name__ == "__main__":
-    bot = TwitchDiceBot()
-    bot.run()
+# Setup function to add the cog
+async def setup(bot):
+    await bot.add_cog(TwitchBot(bot))
