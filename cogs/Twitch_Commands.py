@@ -1,4 +1,4 @@
-import os  # Add this import
+import os
 from discord.ext import commands  # Use Discord's commands for the cog
 from twitchio.ext import commands as twitch_commands
 import random
@@ -6,9 +6,14 @@ import random
 class TwitchCommands(commands.Cog):  # Inherit from discord.ext.commands.Cog
     def __init__(self, bot):
         self.bot = bot  # Reference to the main bot instance
+        twitch_token = os.getenv("TWITCH_OAUTH_TOKEN")
+
+        if not twitch_token:
+            raise ValueError("Twitch OAuth token is missing. Please set TWITCH_OAUTH_TOKEN in your .env file.")
+
         self.twitch_bot = twitch_commands.Bot(
-            token=os.getenv("TWITCH_OAUTH_TOKEN"), 
-            prefix="!", 
+            token=twitch_token,
+            prefix="!",
             initial_channels=[os.getenv("TWITCH_CHANNEL")]
         )
 
@@ -28,8 +33,10 @@ class TwitchCommands(commands.Cog):  # Inherit from discord.ext.commands.Cog
     async def start_twitch_bot(self):
         await self.twitch_bot.start()  # Start the Twitch bot
 
+    async def cog_load(self):
+        """Runs when the cog is loaded to start the Twitch bot asynchronously."""
+        self.bot.loop.create_task(self.start_twitch_bot())  # Start Twitch bot as an async task
+
 # Setup function to add the cog
 async def setup(bot):
-    twitch_commands_cog = TwitchCommands(bot)
-    await bot.add_cog(twitch_commands_cog)
-    bot.loop.create_task(twitch_commands_cog.start_twitch_bot())  # Run the Twitch bot in an async task
+    await bot.add_cog(TwitchCommands(bot))
