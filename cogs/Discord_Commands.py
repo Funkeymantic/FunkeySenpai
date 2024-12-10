@@ -18,7 +18,7 @@ class OfficeManagement(commands.Cog):
         await ctx.send("Shutting down the bot...")
         await self.bot.close()
 
-        # Restart command, restricted to moderators
+    # Restart command, restricted to moderators
     @commands.command(name="restart")
     @commands.has_any_role('Dungeon Master', 'Deities')
     async def restart(self, ctx):
@@ -30,15 +30,25 @@ class OfficeManagement(commands.Cog):
 
         # Install requirements
         install_result = subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
-        await self.send_long_message(ctx, f"Pip install output:\n{install_result.stdout}")
+
+        # Fetch the owner user defined in bot.py
+        owner_user = await self.bot.fetch_user(223688811845124096)  # Replace with YOUR_USER_ID from bot.py
+        if owner_user:
+            await self.send_long_message_dm(owner_user, f"Pip install output:\n{install_result.stdout}")
 
         # Restart the bot
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
     async def send_long_message(self, ctx, content, limit=2000):
-        """Sends long messages split into chunks."""
+        """Sends long messages split into chunks in the current channel."""
         for chunk in textwrap.wrap(content, limit):
             await ctx.send(chunk)
+
+    async def send_long_message_dm(self, user, content, limit=2000):
+        """Sends long messages split into chunks as a DM."""
+        for chunk in textwrap.wrap(content, limit):
+            await user.send(chunk)
+
 
     @commands.command(name="roll")
     async def roll(self, ctx, dice: str):
