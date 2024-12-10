@@ -34,7 +34,7 @@ class OfficeManagement(commands.Cog):
         # Fetch the owner user defined in bot.py
         owner_user = await self.bot.fetch_user(223688811845124096)  # Replace with YOUR_USER_ID from bot.py
         if owner_user:
-            await self.send_long_message_dm(owner_user, f"Pip install output: Done")
+            await self.send_long_message_dm(owner_user, f"Pip install output:\n{install_result.stdout}")
 
         # Restart the bot
         os.execv(sys.executable, [sys.executable] + sys.argv)
