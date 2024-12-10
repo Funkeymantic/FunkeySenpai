@@ -5,6 +5,7 @@ from utils.discord_helpers import timestamp, fancy_font
 import sys
 import subprocess
 import random
+import textwrap
 
 class OfficeManagement(commands.Cog):
     def __init__(self, bot):
@@ -25,15 +26,20 @@ class OfficeManagement(commands.Cog):
 
         # Pull the latest changes from the repository
         result = subprocess.run(["git", "pull"], capture_output=True, text=True)
-        await ctx.send(f"Git pull output:\n{result.stdout}")
+        await self.send_long_message(ctx, f"Git pull output:\n{result.stdout}")
 
         # Install requirements
         install_result = subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
-        await ctx.send(f"Pip install output:\n{install_result.stdout}")
+        user = await self.bot.fetch_user(223688811845124096)
+        await user.send_long_message(ctx, f"Pip install output:\n{install_result.stdout}")
 
-        
         # Restart the bot
         os.execv(sys.executable, [sys.executable] + sys.argv)
+
+    async def send_long_message(self, ctx, content, limit=2000):
+        """Sends long messages split into chunks."""
+        for chunk in textwrap.wrap(content, limit):
+            await ctx.send(chunk)
 
     @commands.command(name="roll")
     async def roll(self, ctx, dice: str):
