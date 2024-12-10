@@ -18,7 +18,7 @@ class OfficeManagement(commands.Cog):
         await ctx.send("Shutting down the bot...")
         await self.bot.close()
 
-    # Restart command, restricted to moderators
+        # Restart command, restricted to moderators
     @commands.command(name="restart")
     @commands.has_any_role('Dungeon Master', 'Deities')
     async def restart(self, ctx):
@@ -30,8 +30,7 @@ class OfficeManagement(commands.Cog):
 
         # Install requirements
         install_result = subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], capture_output=True, text=True)
-        user = await self.bot.fetch_user(223688811845124096)
-        await user.send_long_message(ctx, f"Pip install output:\n{install_result.stdout}")
+        await self.send_long_message(ctx, f"Pip install output:\n{install_result.stdout}")
 
         # Restart the bot
         os.execv(sys.executable, [sys.executable] + sys.argv)
