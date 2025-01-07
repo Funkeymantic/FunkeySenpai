@@ -70,33 +70,33 @@ class OfficeManagement(commands.Cog):
     async def createhouse(self, ctx, channel_name: str, user: discord.Member):
         fancy_channel_name = ''.join(fancy_font.get(char, char) for char in channel_name)
         category = discord.utils.get(ctx.guild.categories, name='𝗧𝗿𝗲𝗲 𝗛𝗼𝘂𝘀𝗲')
-        
+
         # Create category if it doesn't exist
         if category is None:
             category = await ctx.guild.create_category('𝗧𝗿𝗲𝗲 𝗛𝗼𝘂𝘀𝗲')
-        
+
         # Create the voice channel in the category
         voice_channel = await ctx.guild.create_voice_channel(fancy_channel_name, category=category)
-        
+
         # Create the office role for the owner
         fancy_role_name = ''.join(fancy_font.get(char, char) for char in f"{channel_name} 𝙺𝚎𝚢")
         office_role = await ctx.guild.create_role(name=fancy_role_name, permissions=discord.Permissions(connect=True, speak=True))
-        
+
         # Assign the office role to the user
         await user.add_roles(office_role)
-        
+
         # Add explicit permissions for the owner in the voice channel
-        await voice_channel.set_permissions(user, manage_permissions=True, connect=True, speak=True)
-        
-        # Set default permissions to prevent others from connecting
-        await voice_channel.set_permissions(ctx.guild.default_role, connect=False)
-        
+        await voice_channel.set_permissions(user, overwrite=discord.PermissionOverwrite(manage_permissions=True, connect=True, speak=True, view_channel=True))
+
+        # Set default permissions to prevent others from connecting or viewing
+        await voice_channel.set_permissions(ctx.guild.default_role, overwrite=discord.PermissionOverwrite(connect=False, view_channel=False))
+
         # Grant mods permissions to manage the voice channel
         for mod_role in ('Dungeon Master', 'Deities'):
             role = discord.utils.get(ctx.guild.roles, name=mod_role)
             if role:
-                await voice_channel.set_permissions(role, manage_channels=True, connect=True)
-        
+                await voice_channel.set_permissions(role, overwrite=discord.PermissionOverwrite(manage_channels=True, connect=True, view_channel=True))
+
         await ctx.send(f"Office '{channel_name}' has been created for {user.mention}!")
 
     # Command to give a 𝙺𝚎𝚢 (role) to a user
