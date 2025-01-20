@@ -64,7 +64,7 @@ class OfficeManagement(commands.Cog):
         except ValueError:
             await ctx.send("Invalid format! Please use the format like d20, d6, etc.")
     
-    # Command for new Office (TREE HOUSE)
+    # Command for new Office (𝐓𝐡𝐞 𝐆𝐮𝐢𝐥𝐝 𝐎𝐟𝐟𝐢𝐜𝐞𝐬 (𝐏𝐫𝐢𝐯𝐚𝐭𝐞 𝐕𝐂𝐬))
     @commands.command()
     @commands.has_any_role('Dungeon Master', 'Deities')
     async def createhouse(self, ctx, channel_name: str, user: discord.Member):
@@ -73,7 +73,7 @@ class OfficeManagement(commands.Cog):
 
         # Create category if it doesn't exist
         if category is None:
-            category = await ctx.guild.create_category('𝗧𝗿𝗲𝗲 𝗛𝗼𝘂𝘀𝗲')
+            category = await ctx.guild.create_category('𝐓𝐡𝐞 𝐆𝐮𝐢𝐥𝐝 𝐎𝐟𝐟𝐢𝐜𝐞𝐬 (𝐏𝐫𝐢𝐯𝐚𝐭𝐞 𝐕𝐂𝐬)')
 
         # Create the voice channel in the category
         voice_channel = await ctx.guild.create_voice_channel(fancy_channel_name, category=category)
