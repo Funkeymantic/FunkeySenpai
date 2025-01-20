@@ -94,7 +94,10 @@ def pull_and_restart():
         try:
             result = subprocess.run(["git", "pull"], capture_output=True, text=True, check=True)
             logging.info(f"Git pull output: {result.stdout}")
-            
+            time.sleep(5)
+            result = subprocess.run(["git", "pull"], capture_output=True, text=True, check=True)
+            logging.info(f"Git pull output: {result.stdout}")
+
             # Restart the bot
             logging.info("Restarting bot...")
             subprocess.run([sys.executable, *sys.argv], shell=True)
