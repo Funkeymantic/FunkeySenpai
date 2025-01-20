@@ -13,14 +13,14 @@ class OfficeManagement(commands.Cog):
 
 # Shutdown command, restricted to moderators
     @commands.command(name="shutdown")
-    @commands.has_any_role('Dungeon Master', 'Deities')
+    @commands.has_any_role('🧙‍♂️ Dungeon Master (Admin)', '🍺 Tavern Keeper (Moderator)')
     async def shutdown(self, ctx):
         await ctx.send("Shutting down the bot...")
         await self.bot.close()
 
     # Restart command, restricted to moderators
     @commands.command(name="restart")
-    @commands.has_any_role('Dungeon Master', 'Deities')
+    @commands.has_any_role('🧙‍♂️ Dungeon Master (Admin)', '🍺 Tavern Keeper (Moderator)')
     async def restart(self, ctx):
         await ctx.send("Pulling latest changes from GitHub and restarting the bot...")
 
@@ -66,7 +66,7 @@ class OfficeManagement(commands.Cog):
     
     # Command for new Office (𝐓𝐡𝐞 𝐆𝐮𝐢𝐥𝐝 𝐎𝐟𝐟𝐢𝐜𝐞𝐬 (𝐏𝐫𝐢𝐯𝐚𝐭𝐞 𝐕𝐂𝐬))
     @commands.command()
-    @commands.has_any_role('Dungeon Master', 'Deities')
+    @commands.has_any_role('🧙‍♂️ Dungeon Master (Admin)', '🍺 Tavern Keeper (Moderator)')
     async def createhouse(self, ctx, channel_name: str, user: discord.Member):
         fancy_channel_name = ''.join(fancy_font.get(char, char) for char in channel_name)
         category = discord.utils.get(ctx.guild.categories, name='𝗧𝗿𝗲𝗲 𝗛𝗼𝘂𝘀𝗲')
@@ -92,7 +92,7 @@ class OfficeManagement(commands.Cog):
         await voice_channel.set_permissions(ctx.guild.default_role, overwrite=discord.PermissionOverwrite(connect=False, view_channel=False))
 
         # Grant mods permissions to manage the voice channel
-        for mod_role in ('Dungeon Master', 'Deities'):
+        for mod_role in ('🧙‍♂️ Dungeon Master (Admin)', '🍺 Tavern Keeper (Moderator)'):
             role = discord.utils.get(ctx.guild.roles, name=mod_role)
             if role:
                 await voice_channel.set_permissions(role, overwrite=discord.PermissionOverwrite(manage_channels=True, connect=True, view_channel=True))
@@ -101,7 +101,7 @@ class OfficeManagement(commands.Cog):
 
     # Command to give a 𝙺𝚎𝚢 (role) to a user
     @commands.command()
-    @commands.has_any_role('Dungeon Master', 'Deities')
+    @commands.has_any_role('🧙‍♂️ Dungeon Master (Admin)', '🍺 Tavern Keeper (Moderator)')
     async def givekey(self, ctx, user: discord.Member):
         if ctx.author.voice and ctx.author.voice.channel:
             vc = ctx.author.voice.channel
@@ -109,7 +109,7 @@ class OfficeManagement(commands.Cog):
             await ctx.send("You must be in the voice channel you own to use this command.")
             return
 
-        if 'Deities' in [role.name for role in ctx.author.roles] or 'Dungeon Master' in [role.name for role in ctx.author.roles] or vc.overwrites_for(ctx.author).manage_permissions:
+        if '🍺 Tavern Keeper (Moderator)' in [role.name for role in ctx.author.roles] or '🧙‍♂️ Dungeon Master (Admin)' in [role.name for role in ctx.author.roles] or vc.overwrites_for(ctx.author).manage_permissions:
             role_name = f"{vc.name} 𝙺𝚎𝚢"
             role = discord.utils.get(ctx.guild.roles, name=role_name)
             if role is None:
@@ -123,7 +123,7 @@ class OfficeManagement(commands.Cog):
 
     # Command to take a 𝙺𝚎𝚢 (role) from a user
     @commands.command()
-    @commands.has_any_role('Dungeon Master', 'Deities')
+    @commands.has_any_role('🧙‍♂️ Dungeon Master (Admin)', '🍺 Tavern Keeper (Moderator)')
     async def takekey(self, ctx, user: discord.Member):
         if ctx.author.voice and ctx.author.voice.channel:
             vc = ctx.author.voice.channel
@@ -131,7 +131,7 @@ class OfficeManagement(commands.Cog):
             await ctx.send("You must be in the voice channel you own to use this command.")
             return
 
-        if 'Deities' in [role.name for role in ctx.author.roles] or 'Dungeon Master' in [role.name for role in ctx.author.roles] or vc.overwrites_for(ctx.author).manage_permissions:
+        if '🍺 Tavern Keeper (Moderator)' in [role.name for role in ctx.author.roles] or '🧙‍♂️ Dungeon Master (Admin)' in [role.name for role in ctx.author.roles] or vc.overwrites_for(ctx.author).manage_permissions:
             role_name = f"{vc.name} 𝙺𝚎𝚢"
             role = discord.utils.get(ctx.guild.roles, name=role_name)
             if role is None:
